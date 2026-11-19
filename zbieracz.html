@@ -4,20 +4,205 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=Cinzel:wght@400..900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" 
     crossorigin="anonymous"></script>
 
+    <style>
+
+    *{
+        font-family: "Press Start 2P", system-ui;
+    }
+
+    body {
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url("src/menu_background.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+    }
+
+    #logo_rog{
+        padding: 20px 10px 10px 5px;
+        width: 550px;
+        height: auto;
+    }
+
+
+    .press-start-2p-regular {
+        font-family: "Press Start 2P", system-ui;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    #przycisk_graj{
+        background-color: red;
+        color: white;
+        border: 4px solid black;
+        padding: 15px 30px;
+        border-radius: 50px;
+        transition: 0.3s;
+        width: 380px;
+        height: 130px;
+        font-size: 40px;
+    }
+
+    #przycisk_graj:hover{
+        background-color: black;
+        color: red;
+        border: 4px solid red;
+        box-shadow: 0 0 40px red;
+    }
+
+    #graj_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 500px;
+    margin: -80px auto;
+}
+
+    #game_music_theme{
+        background-color: black;
+        border: 2px solid red;
+        border-radius: 25px;
+        box-shadow: 0 0 15px red;
+        position: fixed;
+        top: 25px;
+        right: 30px;
+    }
+
+    #game_music_theme::-webkit-media-controls-panel{
+    background-color: black;
+    }
+
+    #game_music_theme::-webkit-media-controls-current-time-display,
+    #game_music_theme::-webkit-media-controls-time-remaining-display {
+    color: #ff0000;
+    text-shadow: none;
+    }
+
+    #game_music_theme::-webkit-media-controls-play-button,
+    #game_music_theme::-webkit-media-controls-mute-button,
+    #game_music_theme::-webkit-media-controls-timeline,
+    #game_music_theme::-webkit-media-controls-volume-slider {
+    filter: invert(16%) sepia(99%) saturate(7404%) hue-rotate(4deg) brightness(95%) contrast(118%);
+    }
+
+    #game_music_theme::-webkit-media-controls-current-time-display,
+    #game_music_theme::-webkit-media-controls-time-remaining-display{
+    font-family: "Press Start 2P", system-ui;
+    font-size: 10px;
+    }
+
+    #instrukcja_przycisk{
+        border: 3px solid black;
+        border-radius: 50px;
+        background-color: red;
+        color: white;
+        width: 45px;
+        height: 45px;
+        box-shadow: 0 0 15px black;
+        position: fixed;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    #instrukcja_przycisk:hover{
+        color: red;
+        background-color: black;
+        border: 3px solid red;
+        box-shadow: 0 0 15px red;
+    }
+
+    #instrukcja{
+        background-color: black;
+        color: red;
+        border: 2px solid red;
+        border-radius: 25px;
+        box-shadow: 0 0 15px red;
+        padding: 10px;
+        width: 780px;
+        height: auto;
+        line-height: 1.1;
+        position: fixed;
+        bottom: 65px;
+        right: 15px;
+        text-align: center;
+    }
+
+    #czas_tekst{
+        color: green;
+    }
+
+    #skarb_tekst{
+        color: orange;
+    }
+
+    #nazwa_gry_tekst{
+        color: white;
+    }
+
+    #diamenty_tekst{
+        color: skyblue;
+    }
+
+    #monety_tekst{
+        color: yellow;
+    }
+
+    </style>
 
     <script>
 
         $(function(){
 
-            
+            $("#game_music_theme").prop("volume", 0.3);
+
+            $("#instrukcja_przycisk").on("mouseover", function(){
+                $("#instrukcja").show(1000)
+            })
+
+            $("#instrukcja_przycisk").on("mouseout", function(){
+                $("#instrukcja").hide(1000)
+            })
+
+            $("#logo_rog").on("click", function(e){
+                e.preventDefault();
+                $("#logo_rog").prop("href", "zbieracz.html")
+            })
         })
 
     </script>
+
 </head>
 <body>
+    <img src="src/logo_pochyle.png" id="logo_rog">
+
+    <form id="graj_form">
+        <img src="src/zbieracz_logo.png" id="logo_glowne">
+
+        <button id="przycisk_graj">START</button>
+    </form>
+
+    <audio controls autoplay muted loop id="game_music_theme">
+        <source src="src/game_music.mp3">
+    </audio>
     
+    <button id="instrukcja_przycisk">?</button>
+    <p id="instrukcja" hidden>WITAJ W MOJEJ GRZE <span id="nazwa_gry_tekst">"ZBIERACZ: NINJA EDITION"</span>. 
+        TWOIM CELEM JEST WCIELENIE SIĘ W ROLĘ NINJY, KTÓRY DOPIERO JEST NA POCZĄTKU SWOJEJ AMBITNEJ DROGI 
+        ZOSTANIA MISTRZEM ŚWIATA. ALE UWAGA, GRA NIE JEST TAKA PROSTA JAK CI SIĘ WYDAJE! MUSISZ ZBIERAĆ 
+        <span id="monety_tekst">MONETY</span> ORAZ <span id="diamenty_tekst">DIAMENTY</span> ABY ZDOBYWAĆ PUNKTY, 
+        ALE PAMIĘTAJ W MROKU ZAWSZE CZYCHA NAJWIĘKSZE ZŁO. OMIJAJ NAJLEPIEJ JAK MOŻESZ WSZYSTKICH NINJA STRAŻNIKÓW 
+        ABY NIE ZOSTAĆ ZŁAPANYM. JEŚLI JAKIMŚ CUDEM UDA CI SIĘ PRZEŻYĆ <span id="czas_tekst">60 SEKUND</span> I 
+        ZDOBĘDZIESZ CHOCIAŻ <span id="skarb_tekst">20 SKARBÓW</span> DLA SWOJEGO DZIADKA HACHIGIRO TAGASHAKI ABY 
+        POMÓC MU WYJŚĆ Z TRUDNEJ SYTUACJI RODZINNEJ, TO MOŻE W ZAMIAN DZIADEK NAUCZY CIĘ TAJNYCH RODZINNYCH TAKTYK...
+    </p>
 </body>
 </html>
