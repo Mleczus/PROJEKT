@@ -14,6 +14,7 @@
     <style>
 
     *{
+        box-sizing: border-box;
         font-family: "Press Start 2P", system-ui;
     }
 
@@ -35,6 +36,7 @@
     #logo_rog{
         padding: 20px 10px 10px 5px;
         width: 550px;
+        max-width: 90vw;
         height: auto;
     }
 
@@ -53,6 +55,7 @@
         border-radius: 50px;
         transition: 0.3s;
         width: 380px;
+        max-width: 90vw;
         height: 130px;
         font-size: 40px;
     }
@@ -64,14 +67,20 @@
         box-shadow: 0 0 40px red;
     }
 
-    #graj_form {
+    #graj_form{
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 30px;
         width: 500px;
+        max-width: 90vw;
         margin: -80px auto;
-}
+    }
+
+    #logo_glowne {
+    max-width: 100%;
+    height: auto;
+    }
 
     #game_music_theme{
         background-color: black;
@@ -133,13 +142,16 @@
         border-radius: 25px;
         box-shadow: 0 0 15px red;
         padding: 10px;
-        width: 780px;
-        height: auto;
+        width: 95%;
+        max-width: 780px;
+        max-height: 70vh;
+        overflow-y: auto;
         line-height: 1.1;
         position: fixed;
         bottom: 65px;
-        right: 15px;
+        right: 2%;
         text-align: center;
+        z-index: 10
     }
 
     #czas_tekst{
@@ -171,9 +183,10 @@
         height: 45px;
         box-shadow: 0 0 15px black;
         position: fixed;
-        bottom: 196px;
-        right: 940px;
+        bottom: 28vh;
+        right: 49%;
         text-align: center;
+        z-index: 1;
     }
 
     #ustawienia_przycisk:hover{
@@ -188,11 +201,89 @@
         font-size: 25px;
     }
 
+    #ustawienia_ekran{
+        position: fixed;
+        background-color: rgba(0, 0, 0, 0.9);
+        color: red;
+        border: 2px solid red;
+        border-radius: 25px;
+        box-shadow: 0 0 15px red;
+        height: 400px;
+        max-height: 85vh;
+        width: 550px;
+        max-width: 90vw;
+        bottom: 28vh;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: column;
+        justify-content: center; 
+        align-items: center; 
+        display: none; 
+        z-index: 5;
+    }
+
+    #ustawienie_gora, #ustawienie_dol, #ustawienie_lewo, #ustawienie_prawo{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 120px;
+    }
+
+    #gora_przycisk, #dol_przycisk, #lewo_przycisk, #prawo_przycisk{
+        border: 3px solid black;
+        border-radius: 25px;
+        background-color: red;
+        color: white;
+        box-shadow: 0 0 15px black;
+        text-align: center;
+        width: 40px;
+        height: 35px;
+    }
+
+    #gora_przycisk:hover, #dol_przycisk:hover, #lewo_przycisk:hover, #prawo_przycisk:hover{
+        color: red;
+        background-color: black;
+        border: 3px solid red;
+        box-shadow: 0 0 15px red;
+    }
+
+    #napis_ustawienia{
+        color: white;
+    }
+
+    #zamknij_ustawienia{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+    }
+
+    #ekran_gry{
+        width: 100%;
+        min-height: 100vh;
+        background-image: url("src/mapa.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #nowy_bind_tekst{
+        color: white;
+    }
+
+
     </style>
 
     <script>
 
         $(function(){
+
+            let bind_gora = "w";
+            let bind_dol = "s";
+            let bind_lewo = "a";
+            let bind_prawo = "d";
 
             $("#game_music_theme").prop("volume", 0.3);
 
@@ -204,7 +295,75 @@
                 $("#instrukcja").hide(1000)
             })
 
+            $("#ustawienia_przycisk").on("click", function(){
+                $("#ustawienia_ekran").css("display", "flex").hide().fadeIn(200);
+            })
+
+            $("#zamknij_ustawienia").on("click", function(){
+                $("#ustawienia_ekran").fadeOut(200);
+            })
+
+            $("#przycisk_graj").on("click", function(e){
+                e.preventDefault();
+
+                $("#menu_gry").hide();
+                $("#ekran_gry").show();
+            })
+
+
             
+            $("#gora_przycisk").on("click", function(){
+                $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
+
+                $(document).on("keydown", function(event){
+                    bind_gora = event.key.toLowerCase();
+
+                    $("#gora_przycisk").text(bind_gora.toUpperCase());
+                    $("#nowy_bind_tekst").text("");
+
+                    $(document).off("keydown");
+
+                })
+            })
+
+            $("#dol_przycisk").on("click", function(){
+                $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
+
+                $(document).on("keydown", function(event){
+                    bind_dol = event.key.toLowerCase();
+
+                    $("#dol_przycisk").text(bind_dol.toUpperCase());
+                    $("#nowy_bind_tekst").text("");
+
+                    $(document).off("keydown");
+                })
+            })
+
+            $("#lewo_przycisk").on("click", function(){
+                $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
+
+                $(document).on("keydown", function(event){
+                    bind_lewo = event.key.toLowerCase();
+
+                    $("#lewo_przycisk").text(bind_lewo.toUpperCase());
+                    $("#nowy_bind_tekst").text("");
+
+                    $(document).off("keydown");
+                })
+            })
+
+            $("#prawo_przycisk").on("click", function(){
+                $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
+
+                $(document).on("keydown", function(event){
+                    bind_prawo = event.key.toLowerCase();
+
+                    $("#prawo_przycisk").text(bind_prawo.toUpperCase());
+                    $("#nowy_bind_tekst").text("");
+
+                    $(document).off("keydown");
+                })
+            })
         })
 
     </script>
@@ -236,6 +395,40 @@
     </p>
 
     <button id="ustawienia_przycisk"><i class="bi bi-gear"></i></button>
+
+    <div id="ustawienia_ekran">
+
+        <p id="napis_ustawienia">USTAWIENIA</p>
+
+        <span id="zamknij_ustawienia">X</span>
+
+        <div id="ustawienie_gora">
+            <p id="gora_tekst">GÓRA</p>
+            <button id="gora_przycisk">W</button>
+        </div>
+
+        <div id="ustawienie_dol">
+            <p id="dol_tekst">DÓŁ</p>
+            <button id="dol_przycisk">S</button>
+        </div>
+
+        <div id="ustawienie_lewo">
+            <p id="lewo_tekst">LEWO</p>
+            <button id="lewo_przycisk">A</button>
+        </div>
+
+        <div id="ustawienie_prawo">
+            <p id="prawo_tekst">PRAWO</p>
+            <button id="prawo_przycisk">D</button>
+        </div>
+
+        <p id="nowy_bind_tekst"></p>
+
+    </div>
 </div>
+</div>
+
+<div id="ekran_gry" hidden>GRA W REMONCIE!</div>
+    
 </body>
 </html>
