@@ -23,6 +23,7 @@
     }
 
     #menu_gry{
+        display: block;
         width: 100%;
         min-height: 100vh;
         background-image: url("src/menu_background.png");
@@ -359,6 +360,30 @@
         color: white;
     }
 
+    #ekran_gry,
+    #ekran_koniec {
+        display: none;
+    }
+
+    #arena_gry {
+        position: absolute;
+        width: 68%;
+        height: 51%;
+        left: 16%;
+        top: 27%;
+    }
+
+    #gracz_postac{
+        width: 64px;
+        height: 64px;
+    }
+
+    #gracz_hitbox{
+        width: 64px;
+        height: 64px;
+        position: absolute;
+    }
+
     </style>
 
     <script>
@@ -371,6 +396,9 @@
             let bind_prawo = "d";
 
             let interwal;
+
+            let positionX = 0;
+            let positionY = 0;
 
             $(document).on("click", function(){
                 $("#game_music_theme")[0].play();
@@ -401,6 +429,14 @@
 
                 $("#menu_gry").hide();
                 $("#ekran_gry").show();
+
+                positionX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                positionY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#gracz_hitbox").css({
+                    "margin-left" : positionX + "px",
+                    "margin-top" : positionY + "px"
+                })
 
                 clearInterval(interwal);
                 
@@ -540,6 +576,59 @@
                 $("#menu_gry").show();
             })
 
+            let aktualny_gif = "";
+
+            $(document).on("keydown", function(event){
+                if(event.key.toLowerCase() == bind_prawo){
+                    positionX += 10;
+
+                    if(aktualny_gif != "prawo"){
+                        $("#gracz_postac").prop("src", "src/ninja_right.gif");
+                        aktualny_gif = "prawo";
+                    }
+                    $("#gracz_hitbox").css("margin-left", positionX + "px");
+                }else if(event.key.toLowerCase() == bind_lewo){
+                    positionX -= 10;
+
+                    if(aktualny_gif != "lewo"){
+                        $("#gracz_postac").prop("src", "src/ninja_left.gif");
+                        aktualny_gif = "lewo";
+                    }
+                    $("#gracz_hitbox").css("margin-left", positionX + "px");
+                }else if(event.key.toLowerCase() == bind_gora){
+                    positionY -= 10;
+                    $("#gracz_hitbox").css("margin-top", positionY + "px");
+                }else if(event.key.toLowerCase() == bind_dol){
+                    positionY += 10;
+                    $("#gracz_hitbox").css("margin-top", positionY + "px");
+                }
+
+                    if(positionX <= 0){
+                        positionX = 0;
+                    }
+
+                    if(positionY <= 0){
+                        positionY = 0;
+                    }
+
+                    if(positionX + 64 > $("#arena_gry").width()){
+                        positionX = $("#arena_gry").width() - 64;
+                    }
+
+                    if(positionY + 64 > $("#arena_gry").height()){
+                        positionY = $("#arena_gry").height() - 64;
+                    }
+
+                    $("#gracz_hitbox").css({
+                        "margin-left": positionX + "px",
+                        "margin-top": positionY + "px"
+                    });
+                })
+
+            $(document).on("keyup", function(){
+                $("#gracz_postac").prop("src", "src/ninja.gif");
+                aktualny_gif = "";
+            })
         })
 
     </script>
@@ -607,12 +696,21 @@
     </div>
 </div>
 
-    <div id="ekran_gry" hidden>GRA W REMONCIE! <button id="koniec_gry_przycisk_temporary">koniec</button>
-    <p id="czas_gry">CZAS: 60s</p>
+    <div id="ekran_gry">
+        <button id="koniec_gry_przycisk_temporary">koniec</button>
+        <p id="czas_gry">CZAS: 60s</p>
+
+        <div id="arena_gry">
+
+            <div id="gracz_hitbox">
+                <img src="src/ninja.gif" id="gracz_postac">
+            </div>
+
+        </div>
     </div>
     
 
-    <div id="ekran_koniec" hidden>
+    <div id="ekran_koniec">
         <img src="src/logo_pochyle.png" id="logo_rog">
 
         <p id="twoj_wynik">WYNIK: </p>
