@@ -90,6 +90,8 @@
         position: fixed;
         top: 25px;
         right: 30px;
+        width: 216px;
+        max-width: 90vw;
     }
 
     #game_music_theme::-webkit-media-controls-panel{
@@ -102,11 +104,14 @@
     text-shadow: none;
     }
 
-    #game_music_theme::-webkit-media-controls-play-button,
-    #game_music_theme::-webkit-media-controls-mute-button,
-    #game_music_theme::-webkit-media-controls-timeline,
-    #game_music_theme::-webkit-media-controls-volume-slider {
+    #game_music_theme::-webkit-media-controls-play-button{
         filter: invert(16%) sepia(99%) saturate(7404%) hue-rotate(4deg) brightness(95%) contrast(118%);
+    }
+
+    #game_music_theme::-webkit-media-controls-volume-slider,
+    #game_music_theme::-webkit-media-controls-mute-button,
+    #game_music_theme::-webkit-media-controls-timeline{
+        display: none;
     }
 
     #game_music_theme::-webkit-media-controls-current-time-display,
@@ -151,7 +156,7 @@
         bottom: 65px;
         right: 2%;
         text-align: center;
-        z-index: 10
+        z-index: 10;
     }
 
     #czas_tekst{
@@ -274,6 +279,87 @@
     }
 
 
+    #ekran_koniec{
+        width: 100%;
+        min-height: 100vh;
+        background-image: url("src/koniec_background.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #zagraj_ponownie_przycisk{
+        background-color: red;
+        color: white;
+        border: 4px solid black;
+        padding: 15px 30px;
+        border-radius: 50px;
+        transition: 0.3s;
+        width: 380px;
+        max-width: 90vw;
+        height: 130px;
+        font-size: 40px;
+    }
+
+    #zagraj_ponownie_przycisk:hover{
+        color: red;
+        background-color: black;
+        border: 3px solid red;
+        box-shadow: 0 0 15px red;
+    }
+
+    #powrot_menu_przycisk{
+        background-color: red;
+        color: white;
+        border: 4px solid black;
+        padding: 15px 30px;
+        border-radius: 50px;
+        transition: 0.3s;
+        width: 380px;
+        max-width: 90vw;
+        height: 130px;
+        font-size: 40px;
+    }
+
+    #powrot_menu_przycisk:hover{
+        color: red;
+        background-color: black;
+        border: 3px solid red;
+        box-shadow: 0 0 15px red;
+    }
+
+    #koniec_form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        gap: 10px;
+        width: 500px;
+        max-width: 90vw;
+        bottom: 22vh;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #twoj_wynik{
+        color: white;
+        font-size: 45px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    #muzyka_glosnosc{
+        accent-color: red;
+    }
+
+    #muzyka_tekst{
+        color: white;
+    }
+    
+
     </style>
 
     <script>
@@ -285,7 +371,9 @@
             let bind_lewo = "a";
             let bind_prawo = "d";
 
-            $("#game_music_theme").prop("volume", 0.3);
+            $(document).on("click", function(){
+                $("#game_music_theme")[0].play();
+            })
 
             $("#instrukcja_przycisk").on("mouseover", function(){
                 $("#instrukcja").show(1000)
@@ -296,15 +384,19 @@
             })
 
             $("#ustawienia_przycisk").on("click", function(){
+                $("#przycisk_click_wszystko")[0].play();
                 $("#ustawienia_ekran").css("display", "flex").hide().fadeIn(200);
             })
 
             $("#zamknij_ustawienia").on("click", function(){
+                $("#przycisk_click_wszystko")[0].play();
                 $("#ustawienia_ekran").fadeOut(200);
             })
 
             $("#przycisk_graj").on("click", function(e){
                 e.preventDefault();
+
+                $("#przycisk_click_wszystko")[0].play();
 
                 $("#menu_gry").hide();
                 $("#ekran_gry").show();
@@ -313,57 +405,104 @@
 
             
             $("#gora_przycisk").on("click", function(){
+                $("#przycisk_click_bindy")[0].play();
                 $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
 
-                $(document).on("keydown", function(event){
+                $(document).off("keydown.bind");
+
+                $(document).on("keydown.bind", function(event){
                     bind_gora = event.key.toLowerCase();
 
                     $("#gora_przycisk").text(bind_gora.toUpperCase());
                     $("#nowy_bind_tekst").text("");
 
-                    $(document).off("keydown");
+                    $(document).off("keydown.bind");
 
                 })
             })
 
             $("#dol_przycisk").on("click", function(){
+                $("#przycisk_click_bindy")[0].play();
                 $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
 
-                $(document).on("keydown", function(event){
+                $(document).off("keydown.bind");
+
+                $(document).on("keydown.bind", function(event){
                     bind_dol = event.key.toLowerCase();
 
                     $("#dol_przycisk").text(bind_dol.toUpperCase());
                     $("#nowy_bind_tekst").text("");
 
-                    $(document).off("keydown");
+                    $(document).off("keydown.bind");
                 })
             })
 
             $("#lewo_przycisk").on("click", function(){
+                $("#przycisk_click_bindy")[0].play();
                 $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
 
-                $(document).on("keydown", function(event){
+                $(document).off("keydown.bind");
+
+                $(document).on("keydown.bind", function(event){
                     bind_lewo = event.key.toLowerCase();
 
                     $("#lewo_przycisk").text(bind_lewo.toUpperCase());
                     $("#nowy_bind_tekst").text("");
 
-                    $(document).off("keydown");
+                    $(document).off("keydown.bind");
                 })
             })
 
             $("#prawo_przycisk").on("click", function(){
+                $("#przycisk_click_bindy")[0].play();
                 $("#nowy_bind_tekst").text("NACIŚNIJ NOWY KLAWISZ");
 
-                $(document).on("keydown", function(event){
+                $(document).off("keydown.bind");
+
+                $(document).on("keydown.bind", function(event){
                     bind_prawo = event.key.toLowerCase();
 
                     $("#prawo_przycisk").text(bind_prawo.toUpperCase());
                     $("#nowy_bind_tekst").text("");
 
-                    $(document).off("keydown");
+                    $(document).off("keydown.bind");
                 })
             })
+
+            $("#game_music_theme").prop("volume", 0.3);
+
+            $("#muzyka_glosnosc").on("input", function(){
+                let glosnosc = $(this).val();
+
+                $("#game_music_theme").prop("volume", glosnosc / 100);
+                $("#glosnosc_tekst").text(glosnosc + "%");
+            })
+
+            $("#koniec_gry_przycisk_temporary").on("click", function(){
+                $("#przycisk_click_wszystko")[0].play();
+                $("#ekran_gry").hide();
+                $("#ekran_koniec").show();
+            })
+
+            $("#zagraj_ponownie_przycisk").on("click", function(e){
+                e.preventDefault();
+
+                $("#przycisk_click_wszystko")[0].play();
+
+                $("#ekran_koniec").hide();
+                $("#ekran_gry").show();
+            })
+
+            $("#powrot_menu_przycisk").on("click", function(e){
+                e.preventDefault();
+
+                $("#przycisk_click_wszystko")[0].play();
+
+                $("#ekran_koniec").hide();
+                $("#menu_gry").show();
+            })
+
+
         })
 
     </script>
@@ -379,7 +518,7 @@
         <button id="przycisk_graj">START</button>
     </form>
 
-    <audio controls autoplay muted loop id="game_music_theme">
+    <audio controls autoplay loop id="game_music_theme">
         <source src="src/game_music.mp3">
     </audio>
     
@@ -424,11 +563,34 @@
 
         <p id="nowy_bind_tekst"></p>
 
+        <p id="muzyka_tekst">MUZYKA</p>
+        <input type="range" min="0" max="100" value="30" id="muzyka_glosnosc">
+        <p id="glosnosc_tekst">30%</p>
+
     </div>
 </div>
-</div>
 
-<div id="ekran_gry" hidden>GRA W REMONCIE!</div>
+    <div id="ekran_gry" hidden>GRA W REMONCIE! <button id="koniec_gry_przycisk_temporary">koniec</button></div>
+    
+
+    <div id="ekran_koniec" hidden>
+        <img src="src/logo_pochyle.png" id="logo_rog">
+
+        <p id="twoj_wynik">WYNIK: </p>
+
+        <form id="koniec_form">
+            <button id="zagraj_ponownie_przycisk">ZAGRAJ PONOWNIE</button>
+            <button id="powrot_menu_przycisk">POWRÓT</button>
+        </form>
+    </div>
+
+    <audio id="przycisk_click_wszystko" hidden>
+        <source src="src/button-click.mp3">
+    </audio>
+
+    <audio id="przycisk_click_bindy" hidden>
+        <source src="src/keyboard-single-click.mp3">
+    </audio>
     
 </body>
 </html>
