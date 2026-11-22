@@ -90,7 +90,7 @@
         position: fixed;
         top: 25px;
         right: 30px;
-        width: 216px;
+        width: 280px;
         max-width: 90vw;
     }
 
@@ -358,7 +358,6 @@
     #muzyka_tekst{
         color: white;
     }
-    
 
     </style>
 
@@ -370,6 +369,8 @@
             let bind_dol = "s";
             let bind_lewo = "a";
             let bind_prawo = "d";
+
+            let interwal;
 
             $(document).on("click", function(){
                 $("#game_music_theme")[0].play();
@@ -400,9 +401,27 @@
 
                 $("#menu_gry").hide();
                 $("#ekran_gry").show();
+
+                clearInterval(interwal);
+                
+                let czas = 60;
+
+                if(czas == 60){
+                    $("#gra_start_dzwiek")[0].currentTime = 0;
+                    $("#gra_start_dzwiek")[0].play();
+                }
+                
+                interwal = setInterval(function(){
+                    if(czas <= 0){
+                        $("#ekran_gry").hide();
+                        $("#ekran_koniec").show()
+                        clearInterval(interwal);
+                    }else{
+                        $("#czas_gry").text("CZAS: " + czas-- + "s");
+                    }
+                }, 1000)
+
             })
-
-
             
             $("#gora_przycisk").on("click", function(){
                 $("#przycisk_click_bindy")[0].play();
@@ -469,7 +488,7 @@
                 })
             })
 
-            $("#game_music_theme").prop("volume", 0.3);
+            $("#game_music_theme").prop("volume", 0.1);
 
             $("#muzyka_glosnosc").on("input", function(){
                 let glosnosc = $(this).val();
@@ -491,6 +510,25 @@
 
                 $("#ekran_koniec").hide();
                 $("#ekran_gry").show();
+
+                clearInterval(interwal);
+                
+                let czas = 60;
+
+                if(czas == 60){
+                    $("#gra_start_dzwiek")[0].currentTime = 0;
+                    $("#gra_start_dzwiek")[0].play();
+                }
+                
+                interwal = setInterval(function(){
+                    if(czas <= 0){
+                        $("#ekran_gry").hide();
+                        $("#ekran_koniec").show()
+                        clearInterval(interwal);
+                    }else{
+                        $("#czas_gry").text("CZAS: " + czas-- + "s");
+                    }
+                }, 1000)
             })
 
             $("#powrot_menu_przycisk").on("click", function(e){
@@ -501,7 +539,6 @@
                 $("#ekran_koniec").hide();
                 $("#menu_gry").show();
             })
-
 
         })
 
@@ -564,13 +601,15 @@
         <p id="nowy_bind_tekst"></p>
 
         <p id="muzyka_tekst">MUZYKA</p>
-        <input type="range" min="0" max="100" value="30" id="muzyka_glosnosc">
-        <p id="glosnosc_tekst">30%</p>
+        <input type="range" min="0" max="100" value="10" id="muzyka_glosnosc">
+        <p id="glosnosc_tekst">10%</p>
 
     </div>
 </div>
 
-    <div id="ekran_gry" hidden>GRA W REMONCIE! <button id="koniec_gry_przycisk_temporary">koniec</button></div>
+    <div id="ekran_gry" hidden>GRA W REMONCIE! <button id="koniec_gry_przycisk_temporary">koniec</button>
+    <p id="czas_gry">CZAS: 60s</p>
+    </div>
     
 
     <div id="ekran_koniec" hidden>
@@ -590,6 +629,10 @@
 
     <audio id="przycisk_click_bindy" hidden>
         <source src="src/keyboard-single-click.mp3">
+    </audio>
+
+    <audio id="gra_start_dzwiek" hidden>
+        <source src="src/mk-round-1-fight-gong.mp3">
     </audio>
     
 </body>
