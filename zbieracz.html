@@ -384,6 +384,29 @@
         position: absolute;
     }
 
+    #moneta, #diament{
+        width: 64px;
+        height: 64px;
+        position: absolute;
+    }
+
+    #werdykt.przegrana{
+        color: red;
+    }
+
+    #werdykt.wygrana{
+        color: green;
+    }
+
+    #werdykt{
+        color: white;
+        font-size: 45px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 7vh;
+    }
+
     </style>
 
     <script>
@@ -399,6 +422,19 @@
 
             let positionX = 0;
             let positionY = 0;
+
+            let monetaX = 0;
+            let monetaY = 0;
+
+            let diamentX = 0;
+            let diamentY = 0;
+
+            let diament_wartosc = 3;
+            let moneta_wartosc = 1;
+
+            let punkty = 0;
+
+            let aktualny_gif = "";
 
             $(document).on("click", function(){
                 $("#game_music_theme")[0].play();
@@ -425,6 +461,13 @@
             $("#przycisk_graj").on("click", function(e){
                 e.preventDefault();
 
+                punkty = 0;
+
+                $("#werdykt").removeClass("wygrana przegrana").text("");
+
+                $("#twoj_wynik").removeClass("wygrana przegrana").text("WYNIK: ");
+                $("#punkty_gry").text("PUNKTY: " + punkty);
+
                 $("#przycisk_click_wszystko")[0].play();
 
                 $("#menu_gry").hide();
@@ -434,8 +477,24 @@
                 positionY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
 
                 $("#gracz_hitbox").css({
-                    "margin-left" : positionX + "px",
-                    "margin-top" : positionY + "px"
+                    "left" : positionX + "px",
+                    "top" : positionY + "px"
+                })
+
+                monetaX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                monetaY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#moneta").css({
+                    "left" : monetaX + "px",
+                    "top" : monetaY + "px"
+                })
+
+                diamentX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                diamentY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#diament").css({
+                    "left" : diamentX + "px",
+                    "top" : diamentY + "px"
                 })
 
                 clearInterval(interwal);
@@ -450,6 +509,19 @@
                 interwal = setInterval(function(){
                     if(czas <= 0){
                         $("#ekran_gry").hide();
+                        
+                        $("#twoj_wynik").text("WYNIK: " + punkty);
+
+                        if(punkty >= 40){
+                            $("#werdykt").text("WYGRAŁEŚ").addClass("wygrana");
+                            $("#gra_wygrana")[0].currentTime = 0;
+                            $("#gra_wygrana")[0].play();
+                        }else{
+                            $("#werdykt").text("PRZEGRAŁEŚ").addClass("przegrana");
+                            $("#gra_przegrana")[0].currentTime = 0;
+                            $("#gra_przegrana")[0].play();
+                        }
+
                         $("#ekran_koniec").show()
                         clearInterval(interwal);
                     }else{
@@ -542,10 +614,41 @@
             $("#zagraj_ponownie_przycisk").on("click", function(e){
                 e.preventDefault();
 
+                punkty = 0;
+
+                $("#werdykt").removeClass("wygrana przegrana").text("");
+
+                $("#twoj_wynik").removeClass("wygrana przegrana").text("WYNIK: ");
+                $("#punkty_gry").text("PUNKTY: " + punkty);
+
                 $("#przycisk_click_wszystko")[0].play();
 
                 $("#ekran_koniec").hide();
                 $("#ekran_gry").show();
+
+                positionX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                positionY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#gracz_hitbox").css({
+                    "left" : positionX + "px",
+                    "top" : positionY + "px"
+                })
+
+                monetaX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                monetaY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#moneta").css({
+                    "left" : monetaX + "px",
+                    "top" : monetaY + "px"
+                })
+
+                diamentX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                diamentY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                $("#diament").css({
+                    "left" : diamentX + "px",
+                    "top" : diamentY + "px"
+                })
 
                 clearInterval(interwal);
                 
@@ -559,6 +662,19 @@
                 interwal = setInterval(function(){
                     if(czas <= 0){
                         $("#ekran_gry").hide();
+                        
+                        $("#twoj_wynik").text("WYNIK: " + punkty);
+
+                        if(punkty >= 40){
+                            $("#werdykt").text("WYGRAŁEŚ").addClass("wygrana");
+                            $("#gra_wygrana")[0].currentTime = 0;
+                            $("#gra_wygrana")[0].play();
+                        }else{
+                            $("#werdykt").text("PRZEGRAŁEŚ").addClass("przegrana");
+                            $("#gra_przegrana")[0].currentTime = 0;
+                            $("#gra_przegrana")[0].play();
+                        }
+
                         $("#ekran_koniec").show()
                         clearInterval(interwal);
                     }else{
@@ -570,13 +686,13 @@
             $("#powrot_menu_przycisk").on("click", function(e){
                 e.preventDefault();
 
+                clearInterval(interwal);
+
                 $("#przycisk_click_wszystko")[0].play();
 
                 $("#ekran_koniec").hide();
                 $("#menu_gry").show();
             })
-
-            let aktualny_gif = "";
 
             $(document).on("keydown", function(event){
                 if(event.key.toLowerCase() == bind_prawo){
@@ -586,7 +702,7 @@
                         $("#gracz_postac").prop("src", "src/ninja_right.gif");
                         aktualny_gif = "prawo";
                     }
-                    $("#gracz_hitbox").css("margin-left", positionX + "px");
+                    $("#gracz_hitbox").css("left", positionX + "px");
                 }else if(event.key.toLowerCase() == bind_lewo){
                     positionX -= 10;
 
@@ -594,13 +710,13 @@
                         $("#gracz_postac").prop("src", "src/ninja_left.gif");
                         aktualny_gif = "lewo";
                     }
-                    $("#gracz_hitbox").css("margin-left", positionX + "px");
+                    $("#gracz_hitbox").css("left", positionX + "px");
                 }else if(event.key.toLowerCase() == bind_gora){
                     positionY -= 10;
-                    $("#gracz_hitbox").css("margin-top", positionY + "px");
+                    $("#gracz_hitbox").css("top", positionY + "px");
                 }else if(event.key.toLowerCase() == bind_dol){
                     positionY += 10;
-                    $("#gracz_hitbox").css("margin-top", positionY + "px");
+                    $("#gracz_hitbox").css("top", positionY + "px");
                 }
 
                     if(positionX <= 0){
@@ -620,10 +736,40 @@
                     }
 
                     $("#gracz_hitbox").css({
-                        "margin-left": positionX + "px",
-                        "margin-top": positionY + "px"
-                    });
-                })
+                        "left": positionX + "px",
+                        "top": positionY + "px"
+                    })
+
+                if(positionX < parseInt($("#moneta").css("left")) + 64 && positionX + 64 > parseInt($("#moneta").css("left")) && positionY < parseInt($("#moneta").css("top")) + 64 && positionY + 64 > parseInt($("#moneta").css("top"))){
+                    punkty += 1;
+
+                    $("#podniesienie_monety").prop("volume", 0.5);
+                    $("#podniesienie_monety")[0].currentTime = 0;
+                    $("#podniesienie_monety")[0].play();
+
+                    $("#moneta").css({
+                        "left": Math.floor(Math.random() * ($("#arena_gry").width() - 64)) + "px",
+                        "top": Math.floor(Math.random() * ($("#arena_gry").height() - 64)) + "px"
+                    })
+
+                    $("#punkty_gry").text("PUNKTY: " + punkty);
+                }
+
+                if(positionX < parseInt($("#diament").css("left")) + 64 && positionX + 64 > parseInt($("#diament").css("left")) && positionY < parseInt($("#diament").css("top")) + 64 && positionY + 64 > parseInt($("#diament").css("top"))){
+                    punkty += 3;
+
+                    $("#podniesienie_diamentu").prop("volume", 0.5);
+                    $("#podniesienie_diamentu")[0].currentTime = 0;
+                    $("#podniesienie_diamentu")[0].play();
+
+                    $("#diament").css({
+                        "left": Math.floor(Math.random() * ($("#arena_gry").width() - 64)) + "px",
+                        "top": Math.floor(Math.random() * ($("#arena_gry").height() - 64)) + "px"
+                    })
+
+                    $("#punkty_gry").text("PUNKTY: " + punkty);
+                }
+            })
 
             $(document).on("keyup", function(){
                 $("#gracz_postac").prop("src", "src/ninja.gif");
@@ -655,7 +801,7 @@
         <span id="monety_tekst">MONETY</span> ORAZ <span id="diamenty_tekst">DIAMENTY</span> ABY ZDOBYWAĆ PUNKTY, 
         ALE PAMIĘTAJ W MROKU ZAWSZE CZYCHA NAJWIĘKSZE ZŁO. OMIJAJ NAJLEPIEJ JAK MOŻESZ WSZYSTKICH NINJA STRAŻNIKÓW 
         ABY NIE ZOSTAĆ ZŁAPANYM. JEŚLI JAKIMŚ CUDEM UDA CI SIĘ PRZEŻYĆ <span id="czas_tekst">60 SEKUND</span> I 
-        ZDOBĘDZIESZ CHOCIAŻ <span id="skarb_tekst">20 SKARBÓW</span> DLA SWOJEGO DZIADKA HACHIGIRO TAGASHAKI ABY 
+        ZDOBĘDZIESZ CHOCIAŻ <span id="skarb_tekst">40 SKARBÓW</span> DLA SWOJEGO DZIADKA HACHIGIRO TAGASHAKI ABY 
         POMÓC MU WYJŚĆ Z TRUDNEJ SYTUACJI RODZINNEJ, TO MOŻE W ZAMIAN DZIADEK NAUCZY CIĘ TAJNYCH RODZINNYCH TAKTYK...
     </p>
 
@@ -699,12 +845,16 @@
     <div id="ekran_gry">
         <button id="koniec_gry_przycisk_temporary">koniec</button>
         <p id="czas_gry">CZAS: 60s</p>
+        <p id="punkty_gry">PUNKTY: </p>
 
         <div id="arena_gry">
 
             <div id="gracz_hitbox">
                 <img src="src/ninja.gif" id="gracz_postac">
             </div>
+
+            <img src="src/coin.gif" id="moneta">
+            <img src="src/diamond.gif" id="diament">
 
         </div>
     </div>
@@ -714,6 +864,8 @@
         <img src="src/logo_pochyle.png" id="logo_rog">
 
         <p id="twoj_wynik">WYNIK: </p>
+
+        <p id="werdykt"></p>
 
         <form id="koniec_form">
             <button id="zagraj_ponownie_przycisk">ZAGRAJ PONOWNIE</button>
@@ -730,7 +882,23 @@
     </audio>
 
     <audio id="gra_start_dzwiek" hidden>
-        <source src="src/mk-round-1-fight-gong.mp3">
+        <source src="src/game_start.mp3">
+    </audio>
+
+    <audio id="gra_wygrana" hidden>
+        <source src="src/victory.mp3">
+    </audio>
+
+    <audio id="gra_przegrana" hidden>
+        <source src="src/lose.mp3">
+    </audio>
+
+    <audio id="podniesienie_monety" hidden>
+        <source src="src/coin_pickup.mp3">
+    </audio>
+
+    <audio id="podniesienie_diamentu" hidden>
+        <source src="src/diamond_pickup.mp3">
     </audio>
     
 </body>
