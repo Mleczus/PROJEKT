@@ -428,7 +428,7 @@
     }
 
     #ekran_pauza{
-        display: block;
+        display: none;
         width: 100%;
         min-height: 100vh;
         background-color: rgba(0, 0, 0, 0.9);
@@ -471,6 +471,36 @@
         box-shadow: 0 0 15px red;
     }
 
+    #kontynuj_przycisk_pauza{
+        background-color: red;
+        color: white;
+        border: 4px solid black;
+        padding: 15px 30px;
+        border-radius: 50px;
+        transition: 0.3s;
+        width: 380px;
+        max-width: 90vw;
+        height: 130px;
+        font-size: 40px;
+    }
+
+    #kontynuj_przycisk_pauza:hover{
+        color: red;
+        background-color: black;
+        border: 3px solid red;
+        box-shadow: 0 0 15px red;
+    }
+
+    #pauza_napis{
+        color: white;
+        font-size: 45px;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 15vh;
+        -webkit-text-stroke: 1px black;
+    }
+
     </style>
 
     <script>
@@ -483,6 +513,7 @@
             let bind_prawo = "d";
 
             let interwal;
+            let czas = 60;
 
             let positionX = 0;
             let positionY = 0;
@@ -562,14 +593,14 @@
                 })
 
                 clearInterval(interwal);
-                
-                let czas = 60;
+
+                czas = 60;
 
                 if(czas == 60){
                     $("#gra_start_dzwiek")[0].currentTime = 0;
                     $("#gra_start_dzwiek")[0].play();
                 }
-                
+
                 interwal = setInterval(function(){
                     if(czas <= 0){
                         $("#ekran_gry").hide();
@@ -710,7 +741,7 @@
 
                 clearInterval(interwal);
                 
-                let czas = 60;
+                czas = 60;
 
                 if(czas == 60){
                     $("#gra_start_dzwiek")[0].currentTime = 0;
@@ -764,7 +795,42 @@
                 $("#menu_gry").show();
             })
 
+            $("#kontynuj_przycisk_pauza").on("click", function(e){
+                e.preventDefault();
+
+                $("#przycisk_click_wszystko")[0].play();
+                $("#ekran_pauza").hide();
+                $("#ekran_gry").show();
+
+                interwal = setInterval(function(){
+
+                if(czas <= 0){
+                    clearInterval(interwal);
+
+                    $("#ekran_gry").hide();
+                    $("#twoj_wynik").text("WYNIK: " + punkty);
+
+                if(punkty >= 40){
+                    $("#werdykt").text("WYGRAŁEŚ").addClass("wygrana");
+                    $("#gra_wygrana")[0].currentTime = 0;
+                    $("#gra_wygrana")[0].play();
+                }else{
+                    $("#werdykt").text("PRZEGRAŁEŚ").addClass("przegrana");
+                    $("#gra_przegrana")[0].currentTime = 0;
+                    $("#gra_przegrana")[0].play();
+                }
+                $("#ekran_koniec").show();
+                }else{
+                    $("#czas_gry").text("CZAS: " + czas-- + "s");
+                }}, 1000);
+            });
+
             $(document).on("keydown", function(event){
+
+                if($("#ekran_pauza").is(":visible")){
+                    return;
+                }
+
                 if(event.key.toLowerCase() == bind_prawo){
                     positionX += 10;
 
@@ -844,6 +910,13 @@
             $(document).on("keyup", function(){
                 $("#gracz_postac").prop("src", "src/ninja.gif");
                 aktualny_gif = "";
+            })
+
+            $(document).on("keydown", function(event){
+                if(event.key.toLowerCase() == "p"){
+                    $("#ekran_pauza").show();
+                    clearInterval(interwal);
+                }
             })
         })
 
@@ -928,6 +1001,7 @@
         </div>
 
         <div id="ekran_pauza">
+            <p id="pauza_napis">PAUZA</p>
             <form id="pauza_form">
                 <button id="kontynuj_przycisk_pauza">KONTYNUJ</button>
                 <button id="powrot_menu_przycisk_pauza">POWRÓT DO MENU</button>
