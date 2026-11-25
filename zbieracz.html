@@ -501,6 +501,32 @@
         -webkit-text-stroke: 1px black;
     }
 
+    #tablica_wynikow{
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 2px solid red;
+        width: 300px;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        gap: 5px;
+        max-width: 90vw;
+        bottom: 40vh;
+        left: 26vw;
+        transform: translateX(-50%);
+    }
+
+    #twoj_najlepszy_wynik, #twoj_ostatni_wynik{
+        color: white;
+        -webkit-text-stroke: 1px black;
+        font-size: 20px;
+    }
+
+    #ostatni_tekst, #najlepszy_tekst{
+        color: red;
+    }
+
     </style>
 
     <script>
@@ -919,14 +945,22 @@
                 }
             })
 
-            $("#powrot_menu_przycisk").on("click", function(){
-                localStorage.setItem("ostatni_wynik", punkty);
-                $("#twoje_wyniki").text(localStorage.getItem("ostatni_wynik"));
-                localStorage.setItem("wynik_pamiec", $("#twoje_wyniki").text())
-            })
-            window.onload = function(){
-                $("#twoje_wyniki").text(localStorage.getItem("wynik_pamiec"))
-            }
+            $("#powrot_menu_przycisk").on("click", function() {
+                localStorage.setItem("wynik_pamiec_ostatni", punkty);
+                $("#twoj_ostatni_wynik").text(punkty);
+
+                let rekord = Number(localStorage.getItem("wynik_pamiec_najlepszy"));
+
+                if (punkty > rekord) {
+                    localStorage.setItem("wynik_pamiec_najlepszy", punkty);
+                    $("#twoj_najlepszy_wynik").text(punkty);
+                }
+            });
+
+            $(window).on("load", function() {
+                $("#twoj_ostatni_wynik").text(localStorage.getItem("wynik_pamiec_ostatni"));
+                $("#twoj_najlepszy_wynik").text(localStorage.getItem("wynik_pamiec_najlepszy"));
+            });
         })
 
     </script>
@@ -946,7 +980,12 @@
         <source src="src/game_music.mp3">
     </audio>
 
-    <p id="twoje_wyniki"></p>
+    <div id="tablica_wynikow">
+        <p id="najlepszy_tekst">NAJLEPSZY:</p>
+        <p id="twoj_najlepszy_wynik"></p>
+        <p id="ostatni_tekst">OSTATNI:</p>
+        <p id="twoj_ostatni_wynik"></p>
+    </div>
     
     <button id="instrukcja_przycisk">?</button>
     <p id="instrukcja" hidden>WITAJ W MOJEJ GRZE <span id="nazwa_gry_tekst">"ZBIERACZ: NINJA EDITION"</span>. 
