@@ -503,7 +503,7 @@
 
     #tablica_wynikow{
         background-color: rgba(0, 0, 0, 0.7);
-        border: 2px solid red;
+        border: 4px solid red;
         width: 300px;
         height: auto;
         display: flex;
@@ -527,6 +527,12 @@
         color: red;
     }
 
+    #wrog1, #wrog2, #wrog3, #wrog4, #wrog5{
+        position: absolute;
+        width: 64px;
+        height: 64px;
+    }
+
     </style>
 
     <script>
@@ -539,6 +545,7 @@
             let bind_prawo = "d";
 
             let interwal;
+            let interwal2;
             let czas = 60;
 
             let positionX = 0;
@@ -556,6 +563,9 @@
             let punkty = 0;
 
             let aktualny_gif = "";
+
+            let wrogX = 0;
+            let wrogY = 0;
 
             $(document).on("click", function(){
                 $("#game_music_theme")[0].play();
@@ -645,10 +655,15 @@
 
                         $("#ekran_koniec").show()
                         clearInterval(interwal);
+                        clearInterval(interwal2);
                     }else{
                         $("#czas_gry").text("CZAS: " + czas-- + "s");
                     }
                 }, 1000)
+
+                interwal2 = setInterval(function(){
+                    tworzWroga();
+                }, 10000)
 
             })
             
@@ -961,6 +976,25 @@
                 $("#twoj_ostatni_wynik").text(localStorage.getItem("wynik_pamiec_ostatni"));
                 $("#twoj_najlepszy_wynik").text(localStorage.getItem("wynik_pamiec_najlepszy"));
             });
+
+            function tworzWroga(){
+                for(let i = 1; i <= 5; i++){
+                    let wrog = $("#wrog" + i);
+
+                    if(wrog.is(":hidden")){
+
+                        let wrogX = Math.floor(Math.random() * ($("#arena_gry").width() - 64));
+                        let wrogY = Math.floor(Math.random() * ($("#arena_gry").height() - 64));
+
+                        wrog.css({
+                            "left": wrogX + "px",
+                            "top": wrogY + "px"
+                        });
+                        wrog.show();
+                        break;
+                    }
+                }
+            }
         })
 
     </script>
@@ -1044,6 +1078,12 @@
             <div id="gracz_hitbox">
                 <img src="src/ninja.gif" id="gracz_postac">
             </div>
+
+            <img src="src/ninja_enemy.gif" id="wrog1" hidden>
+            <img src="src/ninja_enemy.gif" id="wrog2" hidden>
+            <img src="src/ninja_enemy.gif" id="wrog3" hidden>
+            <img src="src/ninja_enemy.gif" id="wrog4" hidden>
+            <img src="src/ninja_enemy.gif" id="wrog5" hidden>
 
             <img src="src/coin.gif" id="moneta">
             <img src="src/diamond.gif" id="diament">
