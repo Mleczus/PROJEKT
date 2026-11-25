@@ -918,6 +918,15 @@
                     clearInterval(interwal);
                 }
             })
+
+            $("#powrot_menu_przycisk").on("click", function(){
+                localStorage.setItem("ostatni_wynik", punkty);
+                $("#twoje_wyniki").text(localStorage.getItem("ostatni_wynik"));
+                localStorage.setItem("wynik_pamiec", $("#twoje_wyniki").text())
+            })
+            window.onload = function(){
+                $("#twoje_wyniki").text(localStorage.getItem("wynik_pamiec"))
+            }
         })
 
     </script>
@@ -936,6 +945,8 @@
     <audio controls autoplay loop id="game_music_theme">
         <source src="src/game_music.mp3">
     </audio>
+
+    <p id="twoje_wyniki"></p>
     
     <button id="instrukcja_przycisk">?</button>
     <p id="instrukcja" hidden>WITAJ W MOJEJ GRZE <span id="nazwa_gry_tekst">"ZBIERACZ: NINJA EDITION"</span>. 
